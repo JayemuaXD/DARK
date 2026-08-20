@@ -1,48 +1,45 @@
 package com.jayemuaxd.dark.core.block;
 
-import com.jayemuaxd.dark.core.block.entity.DarkCalderoBlockEntity;
-import com.jayemuaxd.dark.core.registration.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class DarkCalderoBlock extends Block implements EntityBlock {
+public class DarkCalderoBlock extends Block {
+    // 0 = vacío, 1 = agua, 2 = veneno
+    public static final IntegerProperty TIPO = IntegerProperty.create("tipo", 0, 2);
+
     public DarkCalderoBlock(BlockBehaviour.Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(TIPO, 0));
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        // Crear la instancia usando el BlockEntityType registrado
-        return ModBlockEntities.CALDERO_ALQUIMICO.get().create(pos, state);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(TIPO);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(TIPO, 0);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
 
-        BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof DarkCalderoBlockEntity caldero) {
-            String current = caldero.getTipoDeLiquido();
-            String next;
-            if ("vacío".equals(current)) next = "agua";
-            else if ("agua".equals(current)) next = "veneno";
-            else next = "vacío";
+        int current = state.getValue(TIPO);
+        int next = (current + 1) % 3; // ciclo 0->1->2->0
 
-            caldero.setTipoDeLiquido(next);
-            caldero.setChanged();
-            level.sendBlockUpdated(pos, state, state, 3);
-            return InteractionResult.CONSUME;
-        }
-
-        return InteractionResult.PASS;
+        level.setBlock(pos, state.setValue(TIPO, next), 3);
+        return InteractionResult.CONSUME;
     }
 }
