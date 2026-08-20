@@ -13,7 +13,7 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, DarkCoreMod.MODID);
 
     public static final RegistryObject<Item> CALDERO_ALQUIMICO_ITEM = ITEMS.register("caldero_alquimico",
-            () -> new BlockItem(ModBlocks.CALDERO_ALQUIMICO.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS))
+            () -> new BlockItem(ModBlocks.CALDERO_ALQUIMICO.get(), new Item.Properties().tab(CreativeModeTab.TAB_MISC))
     );
 
     public static void register(IEventBus eventBus) {
