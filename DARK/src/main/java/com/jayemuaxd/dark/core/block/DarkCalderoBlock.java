@@ -19,7 +19,7 @@ public class DarkCalderoBlock extends Block {
 
     public DarkCalderoBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(TIPO, 0));
+        this.registerDefaultState(this.defaultBlockState().setValue(TIPO, 0));
     }
 
     @Override
@@ -32,7 +32,7 @@ public class DarkCalderoBlock extends Block {
         return this.defaultBlockState().setValue(TIPO, 0);
     }
 
-    @Override
+    // No implementamos EntityBlock ni BlockEntity — usamos propiedad de bloque para el estado
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
 
