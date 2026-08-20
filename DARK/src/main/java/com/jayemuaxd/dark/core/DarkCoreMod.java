@@ -1,6 +1,8 @@
 package com.jayemuaxd.dark.core;
 
 import com.jayemuaxd.dark.core.alchemy.ElementData;
+import com.jayemuaxd.dark.core.registration.ModBlocks;
+import com.jayemuaxd.dark.core.registration.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -24,6 +26,10 @@ public class DarkCoreMod
     public DarkCoreMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+
+        // Register game content
+        ModBlocks.register(modEventBus);
+        ModItems.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
