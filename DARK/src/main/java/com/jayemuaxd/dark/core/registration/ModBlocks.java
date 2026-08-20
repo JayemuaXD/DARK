@@ -14,7 +14,7 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, DarkCoreMod.MODID);
 
     public static final RegistryObject<Block> CALDERO_ALQUIMICO = BLOCKS.register("caldero_alquimico",
-            () -> new DarkCalderoBlock(BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).noOcclusion())
+            () -> new DarkCalderoBlock(BlockBehaviour.Properties.of(Material.STONE).strength(2.0f).noOcclusion())
     );
 
     public static void register(IEventBus eventBus) {
